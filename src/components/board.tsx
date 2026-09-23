@@ -6,9 +6,19 @@ const Board = () => {
   const { activeBoardName } = useActiveBoard();
   const {
     state: { boards },
+    setTask,
+    setOnEdit,
   } = useBoard();
   const board = boards.find((board) => board.name === activeBoardName)!;
   console.log({ board });
+
+  if (!board) {
+    return (
+      <p className="p-6 text-muted-foreground">
+        No boards yet — create one to get started.
+      </p>
+    );
+  }
   return (
     <section className="px-6 pb-6 pt-28.25 h-screen box-border overflow-x-auto">
       <ul className="flex gap-6 overflow-hidden">
@@ -32,6 +42,10 @@ const Board = () => {
                 {column.tasks.map((task) => (
                   <li
                     key={task.id}
+                    onClick={() => {
+                      setTask(task);
+                      setOnEdit(true);
+                    }}
                     className="bg-card group rounded-lg shadow-[0px_4px_6px_0px_rgba(54,78,126,0.1)] px-4 py-6 cursor-pointer hover:opacity-80 transition-opacity"
                   >
                     <p className="text-[15px] font-bold text-foreground mb-1 group-hover:text-primary">

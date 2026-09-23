@@ -1,5 +1,5 @@
 import { useReducer, type ReactNode, useState } from "react";
-import { boardReducer, type BoardData } from "../domain/board";
+import { boardReducer, type Task, type BoardData } from "../domain/board";
 import { CreateBoardContext } from "./board-context";
 import { boards } from "../data.json";
 
@@ -9,6 +9,9 @@ export const BoardContextProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(boardReducer, initialState);
   const [openAddBoardForm, setOpenAddBoardForm] = useState(false);
   const [showTaskForm, setShowTaskForm] = useState(false);
+  const [onEdit, setOnEdit] = useState(false);
+  const [task, setTask] = useState<Task | null>(null);
+  console.log({ initialState });
   return (
     <CreateBoardContext
       value={{
@@ -18,6 +21,10 @@ export const BoardContextProvider = ({ children }: { children: ReactNode }) => {
         setOpenAddBoardForm,
         showTaskForm,
         setShowTaskForm,
+        onEdit,
+        setOnEdit,
+        task,
+        setTask,
       }}
     >
       {children}

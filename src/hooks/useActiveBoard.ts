@@ -3,12 +3,11 @@ import { useSearchParams } from "react-router";
 import { useBoard } from "./useBoard";
 
 export const useActiveBoard = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const activeBoardName = searchParams.get("board");
-
   const {
     state: { boards },
   } = useBoard();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeBoardName = searchParams.get("board") ?? boards[0].name;
 
   useEffect(() => {
     const boardExists = boards.some((b) => b.name === activeBoardName);

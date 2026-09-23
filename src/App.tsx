@@ -9,11 +9,21 @@ import { AddBoardDialog } from "./components/forms/addBoardDialog";
 import Board from "./components/board";
 
 import { AddTaskDialog } from "./components/forms/addTaskDialog";
+import { ViewTaskDialog } from "./components/viewTaskDialog";
+import { useActiveBoard } from "./hooks/useActiveBoard";
 
 function App() {
   const { currentSlide, setCurrentSlide } = useSlide(); // Ensure the slide context is used in the App component
-  const { openAddBoardForm, showTaskForm } = useBoard();
-
+  const {
+    openAddBoardForm,
+    showTaskForm,
+    task,
+    state: { boards },
+    setOnEdit,
+    setTask,
+  } = useBoard();
+  const { activeBoardName } = useActiveBoard();
+  const board = boards.find((b) => b.name === activeBoardName)!;
   return (
     <>
       <Sidebar />
@@ -37,6 +47,19 @@ function App() {
       </main>
       {openAddBoardForm && createPortal(<AddBoardDialog />, document.body)}
       {showTaskForm && createPortal(<AddTaskDialog />, document.body)}
+      {task &&
+        createPortal(
+          <ViewTaskDialog
+            task={task}
+            boardId={board.id}
+            onEdit={setTask}
+            onOpenChange={() => {
+              setTask(null);
+              setOnEdit(false);
+            }}
+          />,
+          document.body,
+        )}
     </>
   );
 }
