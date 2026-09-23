@@ -36,7 +36,7 @@ const Header = () => {
       </p>
       <button
         onClick={() => setShowTaskForm(true)}
-        className="ml-auto bg-primary py-3 px-4 rounded-full capitalize font-bold text-[15px] cursor-pointer hover:bg-primary-hover"
+        className="ml-auto bg-primary text-white py-3 px-4 rounded-full capitalize font-bold text-[15px] cursor-pointer hover:bg-primary-hover"
       >
         + add new task
       </button>
