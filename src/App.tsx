@@ -17,13 +17,16 @@ function App() {
   const {
     openAddBoardForm,
     showTaskForm,
-    task,
+    taskId,
     state: { boards },
     setOnEdit,
-    setTask,
+    setTaskId,
   } = useBoard();
   const { activeBoardName } = useActiveBoard();
   const board = boards.find((b) => b.name === activeBoardName)!;
+  const selectedTask =
+    board.columns.flatMap((c) => c.tasks).find((t) => t.id === taskId) ?? null;
+
   return (
     <>
       <Sidebar />
@@ -47,14 +50,14 @@ function App() {
       </main>
       {openAddBoardForm && createPortal(<AddBoardDialog />, document.body)}
       {showTaskForm && createPortal(<AddTaskDialog />, document.body)}
-      {task &&
+      {selectedTask &&
         createPortal(
           <ViewTaskDialog
-            task={task}
+            task={selectedTask}
             boardId={board.id}
-            onEdit={setTask}
+            onEdit={setTaskId}
             onOpenChange={() => {
-              setTask(null);
+              setTaskId(null);
               setOnEdit(false);
             }}
           />,

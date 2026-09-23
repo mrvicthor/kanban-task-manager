@@ -21,12 +21,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useBoard } from "@/hooks/useBoard";
 import type { Task } from "@/domain/board";
+import type { Dispatch, SetStateAction } from "react";
+import { useUpdateTask } from "@/hooks/useUpdateTask";
 
 type ViewTaskDialogProps = {
-  task: Task | null;
+  task: Task;
   boardId: string;
   onOpenChange: () => void;
-  onEdit: (task: Task) => void;
+  onEdit: Dispatch<SetStateAction<string | null>>;
 };
 
 export function ViewTaskDialog({
@@ -39,49 +41,28 @@ export function ViewTaskDialog({
     state: { boards },
     dispatch,
   } = useBoard();
-
-  if (!task) return null;
+  const { changeStatus, toggleSubtask } = useUpdateTask(
+    boardId,
+    task,
+    dispatch,
+  );
 
   const board = boards.find((b) => b.id === boardId)!;
   const completedCount = task.subtasks.filter((s) => s.isCompleted).length;
-
-  const toggleSubtask = (subtaskId: string) => {
-    const updatedSubtasks = task.subtasks.map((s) =>
-      s.id === subtaskId ? { ...s, isCompleted: !s.isCompleted } : s,
-    );
-    dispatch({
-      type: "update_task",
-      boardId,
-      oldStatus: task.status,
-      taskId: task.id as string,
-      task: { ...task, subtasks: updatedSubtasks },
-    });
-  };
-
-  const changeStatus = (newStatus: string | null) => {
-    if (!newStatus || newStatus === task.status) return;
-    dispatch({
-      type: "update_task",
-      boardId,
-      oldStatus: task.status,
-      taskId: task.id as string,
-      task: { ...task, status: newStatus },
-    });
-  };
 
   const handleDelete = () => {
     dispatch({
       type: "delete_task",
       boardId,
       status: task.status,
-      taskId: task.id as string,
+      taskId: task.id,
     });
     onOpenChange();
   };
 
   return (
     <Dialog open={!!task} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <DialogHeader className="flex-row items-start justify-between gap-4">
           <DialogTitle className="text-lg font-bold leading-snug">
             {task.title}
@@ -99,7 +80,7 @@ export function ViewTaskDialog({
               }
             ></DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onEdit(task)}>
+              <DropdownMenuItem onClick={() => onEdit(task.id)}>
                 Edit Task
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -126,7 +107,7 @@ export function ViewTaskDialog({
           {task.subtasks.map((subtask) => (
             <label
               key={subtask.id}
-              className="flex items-center gap-4 bg-background rounded-[4px] px-4 py-3 cursor-pointer hover:bg-primary/10 transition-colors"
+              className="flex items-center gap-4 bg-background rounded-lg px-4 py-3 cursor-pointer hover:bg-primary/10 transition-colors"
             >
               <Checkbox
                 checked={subtask.isCompleted}

@@ -6,11 +6,10 @@ const Board = () => {
   const { activeBoardName } = useActiveBoard();
   const {
     state: { boards },
-    setTask,
+    setTaskId,
     setOnEdit,
   } = useBoard();
   const board = boards.find((board) => board.name === activeBoardName)!;
-  console.log({ board });
 
   if (!board) {
     return (
@@ -43,7 +42,7 @@ const Board = () => {
                   <li
                     key={task.id}
                     onClick={() => {
-                      setTask(task);
+                      setTaskId(task.id);
                       setOnEdit(true);
                     }}
                     className="bg-card group rounded-lg shadow-[0px_4px_6px_0px_rgba(54,78,126,0.1)] px-4 py-6 cursor-pointer hover:opacity-80 transition-opacity"
@@ -64,7 +63,6 @@ const Board = () => {
 
         <li className="flex flex-col w-70 shrink-0 group min-h-[85vh]">
           <span className="mb-6 h-4.25" aria-hidden="true" />{" "}
-          {/* invisible spacer matching header height */}
           <div className="flex-1 rounded-[6px] bg-linear-to-b from-border/40 to-border/20 flex items-center justify-center cursor-pointer hover:from-border/60 hover:to-border/30 transition-colors">
             <span className="text-2xl font-bold text-muted-foreground group-hover:text-primary">
               + New Column
