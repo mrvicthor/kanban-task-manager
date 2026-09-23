@@ -23,6 +23,7 @@ import { useBoard } from "@/hooks/useBoard";
 import type { Task } from "@/domain/board";
 import type { Dispatch, SetStateAction } from "react";
 import { useUpdateTask } from "@/hooks/useUpdateTask";
+import { useDeleteTask } from "@/hooks/useDeleteTask";
 
 type ViewTaskDialogProps = {
   task: Task;
@@ -50,15 +51,7 @@ export function ViewTaskDialog({
   const board = boards.find((b) => b.id === boardId)!;
   const completedCount = task.subtasks.filter((s) => s.isCompleted).length;
 
-  const handleDelete = () => {
-    dispatch({
-      type: "delete_task",
-      boardId,
-      status: task.status,
-      taskId: task.id,
-    });
-    onOpenChange();
-  };
+  const { handleDelete } = useDeleteTask(boardId, task, dispatch, onOpenChange);
 
   return (
     <Dialog open={!!task} onOpenChange={onOpenChange}>
