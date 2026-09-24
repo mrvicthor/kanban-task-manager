@@ -6,7 +6,7 @@ import { useActiveBoard } from "@/hooks/useActiveBoard";
 import { useBoard } from "@/hooks/useBoard";
 import LogoMobile from "@/assets/logo-mobile.svg";
 import BoardActionDialog from "./boardActionDialog";
-import PlusSVGComponent from "./plusSvgComponent";
+import { Plus } from "lucide-react";
 
 const Header = () => {
   const { theme } = useTheme();
@@ -46,9 +46,9 @@ const Header = () => {
       </p>
       <button
         onClick={() => setShowTaskForm(true)}
-        className="ml-auto md:hidden bg-primary py-3 px-5 rounded-full cursor-pointer hover:bg-primary-hover"
+        className="ml-auto md:hidden bg-primary py-3 px-5 rounded-full cursor-pointer hover:bg-primary-hover text-white"
       >
-        <PlusSVGComponent />
+        <Plus />
       </button>
       <button
         onClick={() => setShowTaskForm(true)}
