@@ -23,7 +23,7 @@ const Sidebar = () => {
       window.matchMedia("(prefers-color-scheme: dark)").matches);
   return (
     <section
-      className={`w-75 h-full fixed overflow-auto bg-card px-8 py-8 border-r border-border flex flex-col gap-4 transition-transform duration-300 ease-in-out z-10 ${
+      className={`w-75 h-full hidden fixed overflow-auto bg-card px-8 py-8 border-r border-border md:flex flex-col gap-4 transition-transform duration-300 ease-in-out z-10 ${
         currentSlide > 0 ? "-translate-x-full" : "translate-x-0"
       }`}
     >

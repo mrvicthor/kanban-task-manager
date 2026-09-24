@@ -13,6 +13,8 @@ export const BoardContextProvider = ({ children }: { children: ReactNode }) => {
   const [taskId, setTaskId] = useState<string | null>(null);
   const [viewTask, setViewTask] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [showEditBoard, setShowEditBoard] = useState(false);
+  const [showDeleteBoard, setShowDeleteBoard] = useState(false);
 
   return (
     <CreateBoardContext
@@ -31,6 +33,10 @@ export const BoardContextProvider = ({ children }: { children: ReactNode }) => {
         setViewTask,
         confirmDeleteOpen,
         setConfirmDeleteOpen,
+        setShowEditBoard,
+        showEditBoard,
+        showDeleteBoard,
+        setShowDeleteBoard,
       }}
     >
       {children}

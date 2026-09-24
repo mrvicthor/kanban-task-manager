@@ -20,7 +20,7 @@ const Board = () => {
   }
   return (
     <section className="px-6 pb-6 pt-28.25 h-screen box-border overflow-x-auto">
-      <ul className="flex gap-6 overflow-hidden">
+      <ul className="flex gap-6">
         {board.columns.length === 0 ? (
           <div>
             <p>This board is empty. Create a new column to get started</p>

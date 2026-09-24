@@ -4,6 +4,9 @@ import LogoLight from "@/assets/logo-light.svg";
 import LogoDark from "@/assets/logo-dark.svg";
 import { useActiveBoard } from "@/hooks/useActiveBoard";
 import { useBoard } from "@/hooks/useBoard";
+import PlusSVGComponent from "./plusSvgComponent";
+import LogoMobile from "@/assets/logo-mobile.svg";
+import BoardActionDialog from "./boardActionDialog";
 
 const Header = () => {
   const { theme } = useTheme();
@@ -16,7 +19,7 @@ const Header = () => {
     (theme === "system" &&
       window.matchMedia("(prefers-color-scheme: dark)").matches);
   return (
-    <header className="flex items-center gap-6 border-b border-border h-24.25 bg-card fixed w-full pr-8">
+    <header className="flex items-center gap-4 md:gap-6 border-b border-border h-24.25 bg-card fixed w-full pr-4 md:pr-4">
       {currentSlide > 0 && (
         <>
           <div className={`h-6 ml-6`}>
@@ -29,17 +32,31 @@ const Header = () => {
           <div className="h-full bg-border w-px" />
         </>
       )}
+      <div className="pl-4">
+        <img
+          alt="logo"
+          src={LogoMobile}
+          className="w-full h-full object-contain md:hidden"
+        />
+      </div>
       <p
-        className={`${currentSlide === 0 && "pl-82 transition-transform duration-300 ease-in-out"} text-foreground text-2xl font-bold`}
+        className={`${currentSlide === 0 && "md:pl-70 transition-transform duration-300 ease-in-out"} text-foreground text-2xl font-bold`}
       >
         {activeBoardName}
       </p>
       <button
         onClick={() => setShowTaskForm(true)}
-        className="ml-auto bg-primary text-white py-3 px-4 rounded-full capitalize font-bold text-[15px] cursor-pointer hover:bg-primary-hover"
+        className="ml-auto md:hidden bg-primary py-3 px-5 rounded-full cursor-pointer hover:bg-primary-hover"
+      >
+        <PlusSVGComponent />
+      </button>
+      <button
+        onClick={() => setShowTaskForm(true)}
+        className="ml-auto hidden md:block bg-primary text-white py-3 px-4 rounded-full capitalize font-bold text-[15px] cursor-pointer hover:bg-primary-hover"
       >
         + add new task
       </button>
+      <BoardActionDialog />
     </header>
   );
 };

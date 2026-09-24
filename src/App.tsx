@@ -47,7 +47,7 @@ function App() {
       <Sidebar />
       <Header />
       <main
-        className={`${currentSlide > 0 ? "ml-0" : "ml-75"} transition-all duration-300 ease-in-out`}
+        className={`${currentSlide > 0 ? "ml-0" : "md:ml-75"} transition-all duration-300 ease-in-out`}
       >
         {currentSlide > 0 && (
           <button
