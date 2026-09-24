@@ -4,9 +4,9 @@ import LogoLight from "@/assets/logo-light.svg";
 import LogoDark from "@/assets/logo-dark.svg";
 import { useActiveBoard } from "@/hooks/useActiveBoard";
 import { useBoard } from "@/hooks/useBoard";
-import PlusSVGComponent from "./plusSvgComponent";
 import LogoMobile from "@/assets/logo-mobile.svg";
 import BoardActionDialog from "./boardActionDialog";
+import PlusSVGComponent from "./plusSvgComponent";
 
 const Header = () => {
   const { theme } = useTheme();
