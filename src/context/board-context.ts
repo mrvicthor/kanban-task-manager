@@ -11,6 +11,10 @@ export type BoardContextType = {
   setOnEdit: Dispatch<SetStateAction<boolean>>;
   taskId: string | null;
   setTaskId: Dispatch<SetStateAction<string | null>>;
+  viewTask: boolean;
+  setViewTask: Dispatch<SetStateAction<boolean>>;
+  confirmDeleteOpen: boolean;
+  setConfirmDeleteOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export const CreateBoardContext = createContext<BoardContextType | undefined>(

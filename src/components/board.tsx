@@ -7,7 +7,7 @@ const Board = () => {
   const {
     state: { boards },
     setTaskId,
-    setOnEdit,
+    setViewTask,
   } = useBoard();
   const board = boards.find((board) => board.name === activeBoardName)!;
 
@@ -43,7 +43,7 @@ const Board = () => {
                     key={task.id}
                     onClick={() => {
                       setTaskId(task.id);
-                      setOnEdit(true);
+                      setViewTask(true);
                     }}
                     className="bg-card group rounded-lg shadow-[0px_4px_6px_0px_rgba(54,78,126,0.1)] px-4 py-6 cursor-pointer hover:opacity-80 transition-opacity"
                   >

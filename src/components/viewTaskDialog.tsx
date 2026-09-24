@@ -21,28 +21,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useBoard } from "@/hooks/useBoard";
 import type { Task } from "@/domain/board";
-import type { Dispatch, SetStateAction } from "react";
-import { useUpdateTask } from "@/hooks/useUpdateTask";
-import { useDeleteTask } from "@/hooks/useDeleteTask";
+import { useUpdateSubtask } from "@/hooks/useUpdateSubtask";
 
 type ViewTaskDialogProps = {
   task: Task;
   boardId: string;
-  onOpenChange: () => void;
-  onEdit: Dispatch<SetStateAction<string | null>>;
 };
 
-export function ViewTaskDialog({
-  task,
-  boardId,
-  onOpenChange,
-  onEdit,
-}: ViewTaskDialogProps) {
+export function ViewTaskDialog({ task, boardId }: ViewTaskDialogProps) {
   const {
     state: { boards },
     dispatch,
+    setViewTask,
+    setOnEdit,
+    setConfirmDeleteOpen,
   } = useBoard();
-  const { changeStatus, toggleSubtask } = useUpdateTask(
+  const { changeStatus, toggleSubtask } = useUpdateSubtask(
     boardId,
     task,
     dispatch,
@@ -51,10 +45,8 @@ export function ViewTaskDialog({
   const board = boards.find((b) => b.id === boardId)!;
   const completedCount = task.subtasks.filter((s) => s.isCompleted).length;
 
-  const { handleDelete } = useDeleteTask(boardId, task, dispatch, onOpenChange);
-
   return (
-    <Dialog open={!!task} onOpenChange={onOpenChange}>
+    <Dialog open={!!task} onOpenChange={() => setViewTask(false)}>
       <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <DialogHeader className="flex-row items-start justify-between gap-4">
           <DialogTitle className="text-lg font-bold leading-snug">
@@ -73,12 +65,22 @@ export function ViewTaskDialog({
               }
             ></DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onEdit(task.id)}>
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOnEdit(true);
+                  setViewTask(false);
+                }}
+              >
                 Edit Task
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-destructive"
-                onClick={handleDelete}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setConfirmDeleteOpen(true);
+                  setViewTask(false);
+                }}
               >
                 Delete Task
               </DropdownMenuItem>

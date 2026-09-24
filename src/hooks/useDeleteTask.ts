@@ -1,10 +1,11 @@
 import type { ActionType, Task } from "@/domain/board";
+import type { Dispatch, SetStateAction } from "react";
 
 export function useDeleteTask(
   boardId: string,
   task: Task,
   dispatch: (action: ActionType) => void,
-  onOpenChange: () => void,
+  setConfirmDeleteOpen: Dispatch<SetStateAction<boolean>>,
 ) {
   const handleDelete = () => {
     dispatch({
@@ -13,7 +14,7 @@ export function useDeleteTask(
       status: task.status,
       taskId: task.id,
     });
-    onOpenChange();
+    setConfirmDeleteOpen(false);
   };
 
   return {

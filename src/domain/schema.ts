@@ -58,3 +58,15 @@ export const addTaskSchema = z.object({
 });
 
 export type AddTaskFormValues = z.infer<typeof addTaskSchema>;
+
+export const editTaskSchema = addTaskSchema.extend({
+  subtasks: z.array(
+    z.object({
+      id: z.string().optional(), // existing subtasks carry their real id; new ones omit it
+      title: z.string().min(1, "Can't be empty"),
+      isCompleted: z.boolean().optional(), // existing subtasks carry true/false; new ones default false on submit
+    }),
+  ),
+});
+
+export type EditTaskFormValues = z.infer<typeof editTaskSchema>;

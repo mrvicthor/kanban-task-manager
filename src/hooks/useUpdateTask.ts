@@ -1,38 +1,56 @@
 import type { ActionType, Task } from "@/domain/board";
+import { editTaskSchema, type EditTaskFormValues } from "@/domain/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { ActionDispatch } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 
 export function useUpdateTask(
   boardId: string,
   task: Task,
-  dispatch: (action: ActionType) => void,
+  dispatch: ActionDispatch<[action: ActionType]>,
+  onOpenChange: (open: boolean) => void,
 ) {
-  const toggleSubtask = (subtaskId: string) => {
-    const updatedSubtasks = task.subtasks.map((s) =>
-      s.id === subtaskId ? { ...s, isCompleted: !s.isCompleted } : s,
-    );
+  const form = useForm<EditTaskFormValues>({
+    resolver: zodResolver(editTaskSchema),
+    defaultValues: {
+      title: task.title,
+      description: task.description,
+      subtasks: task.subtasks,
+      status: task.status,
+    },
+  });
 
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "subtasks",
+  });
+
+  const onSubmit = (values: EditTaskFormValues) => {
     dispatch({
       type: "update_task",
       boardId,
       oldStatus: task.status,
-      taskId: task.id,
-      task: { ...task, subtasks: updatedSubtasks },
+      taskId: task.id as string,
+      task: {
+        ...task,
+        title: values.title,
+        description: values.description ?? "",
+        status: values.status,
+        subtasks: values.subtasks.map((s) => ({
+          id: s.id ?? crypto.randomUUID(),
+          title: s.title,
+          isCompleted: s.isCompleted ?? false,
+        })),
+      },
     });
-  };
-
-  const changeStatus = (newStatus: string | null) => {
-    if (!newStatus || newStatus === task.status) return;
-
-    dispatch({
-      type: "update_task",
-      boardId,
-      oldStatus: task.status,
-      taskId: task.id,
-      task: { ...task, status: newStatus },
-    });
+    onOpenChange(false);
   };
 
   return {
-    toggleSubtask,
-    changeStatus,
+    form,
+    fields,
+    append,
+    remove,
+    onSubmit,
   };
 }

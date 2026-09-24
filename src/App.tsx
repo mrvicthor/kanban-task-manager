@@ -11,6 +11,9 @@ import Board from "./components/board";
 import { AddTaskDialog } from "./components/forms/addTaskDialog";
 import { ViewTaskDialog } from "./components/viewTaskDialog";
 import { useActiveBoard } from "./hooks/useActiveBoard";
+import { DeleteTaskDialog } from "./components/deleteTaskDialog";
+import { useDeleteTask } from "./hooks/useDeleteTask";
+import { EditTaskDialog } from "./components/editTaskDialog";
 
 function App() {
   const { currentSlide, setCurrentSlide } = useSlide(); // Ensure the slide context is used in the App component
@@ -19,13 +22,25 @@ function App() {
     showTaskForm,
     taskId,
     state: { boards },
+    viewTask,
+    onEdit,
     setOnEdit,
+    dispatch,
+    setConfirmDeleteOpen,
+    confirmDeleteOpen,
     setTaskId,
   } = useBoard();
   const { activeBoardName } = useActiveBoard();
   const board = boards.find((b) => b.name === activeBoardName)!;
   const selectedTask =
     board.columns.flatMap((c) => c.tasks).find((t) => t.id === taskId) ?? null;
+
+  const { handleDelete } = useDeleteTask(
+    board.id,
+    selectedTask!,
+    dispatch,
+    setConfirmDeleteOpen,
+  );
 
   return (
     <>
@@ -50,15 +65,32 @@ function App() {
       </main>
       {openAddBoardForm && createPortal(<AddBoardDialog />, document.body)}
       {showTaskForm && createPortal(<AddTaskDialog />, document.body)}
-      {selectedTask &&
+      {viewTask &&
+        selectedTask &&
         createPortal(
-          <ViewTaskDialog
+          <ViewTaskDialog task={selectedTask} boardId={board.id} />,
+          document.body,
+        )}
+      {confirmDeleteOpen &&
+        selectedTask &&
+        createPortal(
+          <DeleteTaskDialog
+            open={confirmDeleteOpen}
+            onOpenChange={() => setConfirmDeleteOpen(false)}
+            taskTitle={selectedTask.title}
+            onConfirm={handleDelete}
+          />,
+          document.body,
+        )}
+      {onEdit &&
+        selectedTask &&
+        createPortal(
+          <EditTaskDialog
             task={selectedTask}
             boardId={board.id}
-            onEdit={setTaskId}
             onOpenChange={() => {
-              setTaskId(null);
               setOnEdit(false);
+              setTaskId(null);
             }}
           />,
           document.body,
