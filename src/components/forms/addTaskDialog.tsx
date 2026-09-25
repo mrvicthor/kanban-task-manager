@@ -1,5 +1,4 @@
-import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller } from "react-hook-form";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,57 +18,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useActiveBoard } from "@/hooks/useActiveBoard";
 import { useBoard } from "@/hooks/useBoard";
-import { addTaskSchema, type AddTaskFormValues } from "@/domain/schema";
 import { Field, FieldError, FieldLabel } from "../ui/field";
+import { useAddTask } from "@/hooks/useAddTask";
 
-export function AddTaskDialog() {
-  const { activeBoardName } = useActiveBoard();
+type Props = {
+  activeBoardName: string;
+};
+
+export function AddTaskDialog({ activeBoardName }: Props) {
   const {
     state: { boards },
-    dispatch,
     showTaskForm,
     setShowTaskForm,
   } = useBoard();
   const board = boards.find((b) => b.name === activeBoardName)!;
 
-  const form = useForm<AddTaskFormValues>({
-    resolver: zodResolver(addTaskSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      subtasks: [{ title: "" }, { title: "" }],
-      status: board.columns[0]?.name ?? "",
-    },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: "subtasks",
-  });
-
-  const onSubmit = (values: AddTaskFormValues) => {
-    dispatch({
-      type: "add_task",
-      boardId: board.id as string,
-      status: values.status,
-      task: {
-        id: crypto.randomUUID(),
-        title: values.title,
-        description: values.description ?? "",
-        status: values.status,
-        subtasks: values.subtasks
-          .filter((s) => s.title.trim() !== "")
-          .map((s) => ({
-            id: crypto.randomUUID(),
-            title: s.title,
-            isCompleted: false,
-          })),
-      },
-    });
-    form.reset();
-  };
+  const { form, onSubmit, remove, append, fields } = useAddTask(board);
 
   return (
     <Dialog open={showTaskForm} onOpenChange={setShowTaskForm}>

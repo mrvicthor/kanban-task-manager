@@ -1,8 +1,11 @@
-import { useActiveBoard } from "./useActiveBoard";
+import type { SetURLSearchParams } from "react-router";
 import { useBoard } from "./useBoard";
 
-export function useDeleteBoard(boardId: string) {
-  const { setSearchParams, activeBoardName } = useActiveBoard();
+export function useDeleteBoard(
+  boardId: string,
+  setSearchParams: SetURLSearchParams,
+  activeBoardName: string,
+) {
   const {
     state: { boards },
     setShowDeleteBoard,

@@ -2,17 +2,25 @@ import { useTheme } from "../hooks/useTheme";
 import { useSlide } from "../hooks/useSlide";
 import LogoLight from "@/assets/logo-light.svg";
 import LogoDark from "@/assets/logo-dark.svg";
-import { useActiveBoard } from "@/hooks/useActiveBoard";
 import { useBoard } from "@/hooks/useBoard";
 import LogoMobile from "@/assets/logo-mobile.svg";
 import BoardActionDialog from "./boardActionDialog";
 import { Plus } from "lucide-react";
 
-const Header = () => {
+type HeaderProps = {
+  activeBoardName: string;
+};
+
+const Header = ({ activeBoardName }: HeaderProps) => {
   const { theme } = useTheme();
   const { currentSlide } = useSlide();
-  const { activeBoardName } = useActiveBoard();
-  const { setShowTaskForm } = useBoard();
+
+  const {
+    setShowTaskForm,
+    state: { boards },
+  } = useBoard();
+  const isAddTaskButtonDisabled =
+    boards.find((b) => b.name === activeBoardName)!.columns.length === 0;
 
   const isDark =
     theme === "dark" ||
@@ -52,7 +60,8 @@ const Header = () => {
       </button>
       <button
         onClick={() => setShowTaskForm(true)}
-        className="ml-auto hidden md:block bg-primary text-white py-3 px-4 rounded-full capitalize font-bold text-[15px] cursor-pointer hover:bg-primary-hover"
+        disabled={isAddTaskButtonDisabled}
+        className="ml-auto hidden md:block bg-primary text-white py-3 px-4 rounded-full capitalize font-bold text-[15px] cursor-pointer hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
         + add new task
       </button>

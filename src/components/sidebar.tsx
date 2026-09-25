@@ -6,9 +6,14 @@ import { useSlide } from "@/hooks/useSlide";
 import { useBoard } from "@/hooks/useBoard";
 import ClosedEye from "./closeEye";
 import SvgComponent from "./svgComponent";
-import { useActiveBoard } from "@/hooks/useActiveBoard";
+import type { SetURLSearchParams } from "react-router";
 
-const Sidebar = () => {
+type SidebarProps = {
+  activeBoardName: string;
+  setSearchParams: SetURLSearchParams;
+};
+
+const Sidebar = ({ activeBoardName, setSearchParams }: SidebarProps) => {
   const { theme, setTheme } = useTheme();
   const { currentSlide, setCurrentSlide } = useSlide(); // Assuming you want to use the slide context here, but it's currently unused
   const {
@@ -16,7 +21,7 @@ const Sidebar = () => {
     openAddBoardForm,
     state: { boards },
   } = useBoard();
-  const { activeBoardName, setSearchParams } = useActiveBoard();
+
   const isDark =
     theme === "dark" ||
     (theme === "system" &&
@@ -42,11 +47,11 @@ const Sidebar = () => {
           {boards.map((board, index) => (
             <li
               key={index}
+              onClick={() => setSearchParams({ board: board.name })}
               className={`${board.name === activeBoardName ? "bg-primary text-white" : "hover:bg-background hover:text-primary"} cursor-pointer px-16 py-3.5 text-muted-foreground  left-4 rounded-full`}
             >
               <button
                 className="flex items-center gap-4 cursor-pointer"
-                onClick={() => setSearchParams({ board: board.name })}
                 aria-current={
                   board.name === activeBoardName ? "true" : undefined
                 }

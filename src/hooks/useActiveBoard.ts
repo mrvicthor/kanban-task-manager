@@ -6,10 +6,10 @@ export const useActiveBoard = () => {
   const {
     state: { boards },
   } = useBoard();
+
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const activeBoardName =
-    (searchParams.get("board") ?? boards.length > 0) ? boards[0].name : "";
+  const activeBoardName = searchParams.get("board");
 
   useEffect(() => {
     const boardExists = boards.some((b) => b.name === activeBoardName);

@@ -21,16 +21,21 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { COLUMN_OPTIONS, type Board } from "@/domain/schema";
+import { COLUMN_OPTIONS } from "@/domain/schema";
 import { useUpdateBoard } from "@/hooks/useUpdateBoard";
 import { useBoard } from "@/hooks/useBoard";
 
-type EditBoardDialogProps = {
-  board: Board;
+type Props = {
+  activeBoardName: string;
 };
 
-export function EditBoardDialog({ board }: EditBoardDialogProps) {
-  const { setShowEditBoard } = useBoard();
+export function EditBoardDialog({ activeBoardName }: Props) {
+  const {
+    setShowEditBoard,
+    state: { boards },
+  } = useBoard();
+
+  const board = boards.find((board) => board.name === activeBoardName)!;
   const { form, fields, onSubmit, remove, append } = useUpdateBoard(board);
 
   const columns = useWatch({ control: form.control, name: "columns" }) ?? [];

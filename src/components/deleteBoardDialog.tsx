@@ -9,20 +9,30 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useBoard } from "@/hooks/useBoard";
 import { useDeleteBoard } from "@/hooks/useDeleteBoard";
+import type { SetURLSearchParams } from "react-router";
 
 type DeleteBoardDialogProps = {
   open: boolean;
   boardTitle: string;
   boardId: string;
+  setSearchParams: SetURLSearchParams;
+  activeBoardName: string;
 };
 
 export function DeleteBoardDialog({
   open,
   boardTitle,
   boardId,
+  setSearchParams,
+  activeBoardName,
 }: DeleteBoardDialogProps) {
   const { setShowDeleteBoard } = useBoard();
-  const { deleteBoard } = useDeleteBoard(boardId);
+  const { deleteBoard } = useDeleteBoard(
+    boardId,
+    setSearchParams,
+    activeBoardName,
+  );
+
   return (
     <AlertDialog open={open} onOpenChange={() => setShowDeleteBoard(false)}>
       <AlertDialogContent className="sm:max-w-md py-6 px-6">

@@ -10,14 +10,15 @@ import Board from "./components/board";
 
 import { AddTaskDialog } from "./components/forms/addTaskDialog";
 import { ViewTaskDialog } from "./components/viewTaskDialog";
-import { useActiveBoard } from "./hooks/useActiveBoard";
 import { DeleteTaskDialog } from "./components/deleteTaskDialog";
 import { EditTaskDialog } from "./components/forms/editTaskDialog";
 import { DeleteBoardDialog } from "./components/deleteBoardDialog";
 import { EmptyBoardsState } from "./components/emptyBoard";
 import { EditBoardDialog } from "./components/forms/editBoardDialog";
+import { useActiveBoard } from "./hooks/useActiveBoard";
 
 function App() {
+  console.log("App loaded");
   const { currentSlide, setCurrentSlide } = useSlide(); // Ensure the slide context is used in the App component
   const {
     openAddBoardForm,
@@ -32,10 +33,11 @@ function App() {
     showDeleteBoard,
     showEditBoard,
   } = useBoard();
-  const { activeBoardName } = useActiveBoard();
+
+  const { activeBoardName, setSearchParams } = useActiveBoard();
 
   const board = boards.find((b) => b.name === activeBoardName)!;
-  if (!board) {
+  if (!board || !activeBoardName) {
     return <EmptyBoardsState />;
   }
   const selectedTask =
@@ -43,8 +45,11 @@ function App() {
 
   return (
     <>
-      <Sidebar />
-      <Header />
+      <Sidebar
+        activeBoardName={activeBoardName}
+        setSearchParams={setSearchParams}
+      />
+      <Header activeBoardName={activeBoardName} />
       <main
         className={`${currentSlide > 0 ? "ml-0" : "md:ml-75"} transition-all duration-300 ease-in-out`}
       >
@@ -60,10 +65,14 @@ function App() {
             />
           </button>
         )}
-        <Board />
+        <Board activeBoardName={activeBoardName!} />
       </main>
       {openAddBoardForm && createPortal(<AddBoardDialog />, document.body)}
-      {showTaskForm && createPortal(<AddTaskDialog />, document.body)}
+      {showTaskForm &&
+        createPortal(
+          <AddTaskDialog activeBoardName={activeBoardName} />,
+          document.body,
+        )}
       {viewTask &&
         selectedTask &&
         createPortal(
@@ -101,12 +110,17 @@ function App() {
             open={showDeleteBoard}
             boardTitle={board.name}
             boardId={board.id}
+            setSearchParams={setSearchParams}
+            activeBoardName={activeBoardName}
           />,
           document.body,
         )}
       {showEditBoard &&
         board &&
-        createPortal(<EditBoardDialog board={board} />, document.body)}
+        createPortal(
+          <EditBoardDialog activeBoardName={activeBoardName} />,
+          document.body,
+        )}
     </>
   );
 }

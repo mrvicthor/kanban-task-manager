@@ -124,7 +124,10 @@ export function AddBoardDialog() {
             </Button>
           </div>
 
-          <Button type="submit" className="w-full py-5 rounded-full">
+          <Button
+            type="submit"
+            className="w-full py-5 rounded-full cursor-pointer"
+          >
             Create New Board
           </Button>
         </form>

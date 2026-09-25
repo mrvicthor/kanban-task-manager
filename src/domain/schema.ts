@@ -22,7 +22,6 @@ export const subtaskSchema = z.object({
 const columnsArray = <T extends z.ZodType<{ name: string }>>(item: T) =>
   z
     .array(item)
-    .min(1, "At least one column is required")
     .refine(
       (columns) => new Set(columns.map((c) => c.name)).size === columns.length,
       { message: "Columns must be unique" },
