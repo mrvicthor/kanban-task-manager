@@ -7,7 +7,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import type { Task } from "@/domain/board";
+import type { Task } from "@/domain/schema";
+
 import { useBoard } from "@/hooks/useBoard";
 import { useDeleteTask } from "@/hooks/useDeleteTask";
 

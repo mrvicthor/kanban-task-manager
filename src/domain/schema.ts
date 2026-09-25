@@ -9,43 +9,49 @@ export const COLUMN_OPTIONS = [
   "Later",
 ] as const;
 
+export type ColumnName = (typeof COLUMN_OPTIONS)[number];
+
+const columnName = z.enum(COLUMN_OPTIONS, { message: "Select a column" });
+const boardName = z.string().min(1, "Board name is required");
+
 export const subtaskSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  isComplete: z.boolean().default(false),
+  isCompleted: z.boolean().default(false),
 });
+
+const columnsArray = <T extends z.ZodType<{ name: string }>>(item: T) =>
+  z
+    .array(item)
+    .min(1, "At least one column is required")
+    .refine(
+      (columns) => new Set(columns.map((c) => c.name)).size === columns.length,
+      { message: "Columns must be unique" },
+    );
 
 export const taskSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   status: z.string().min(1, "Status is required"),
-  subtasks: z.array(subtaskSchema).optional,
+  subtasks: z.array(subtaskSchema).default([]),
 });
 
 export const columnSchema = z.object({
-  name: z.string().min(1, "Column name is required"),
-  tasks: z.array(taskSchema).optional(),
+  name: columnName,
+  tasks: z.array(taskSchema).default([]),
 });
 
 export const boardSchema = z.object({
-  name: z.string().min(1, "Board name is required"),
-  columns: z.array(columnSchema).min(1, "At least one column is required"),
+  name: boardName,
+  columns: columnsArray(columnSchema),
 });
 
 export type BoardFormDTO = z.infer<typeof boardSchema>;
 
+const boardColumnFields = columnSchema.pick({ name: true });
+
 export const addBoardSchema = z.object({
-  name: z.string().min(1, "Board name is required"),
-  columns: z
-    .array(
-      z.object({
-        name: z.enum(COLUMN_OPTIONS, { message: "Select a column" }),
-      }),
-    )
-    .min(1, "At least one column is required")
-    .refine(
-      (columns) => new Set(columns.map((c) => c.name)).size === columns.length,
-      { message: "Columns must be unique" },
-    ),
+  name: boardName,
+  columns: columnsArray(boardColumnFields),
 });
 
 export type AddBoardFormValues = z.infer<typeof addBoardSchema>;
@@ -56,6 +62,16 @@ export const addTaskSchema = z.object({
   subtasks: z.array(z.object({ title: z.string().min(1, "Can't be empty") })),
   status: z.string().min(1, "Status is required"),
 });
+
+export const editBoardSchema = addBoardSchema.extend({
+  columns: columnsArray(
+    boardColumnFields.extend({
+      id: z.string().optional(),
+    }),
+  ),
+});
+
+export type EditBoardFormValues = z.infer<typeof editBoardSchema>;
 
 export type AddTaskFormValues = z.infer<typeof addTaskSchema>;
 
@@ -70,3 +86,27 @@ export const editTaskSchema = addTaskSchema.extend({
 });
 
 export type EditTaskFormValues = z.infer<typeof editTaskSchema>;
+
+export const subtaskEntitySchema = subtaskSchema.extend({
+  id: z.string(),
+});
+
+export const taskEntitySchema = taskSchema.extend({
+  id: z.string(),
+  subtasks: z.array(subtaskEntitySchema).default([]),
+});
+
+export const columnEntitySchema = columnSchema.extend({
+  id: z.string(),
+  tasks: z.array(taskEntitySchema).default([]),
+});
+
+export const boardEntitySchema = boardSchema.extend({
+  id: z.string(),
+  columns: columnsArray(columnEntitySchema),
+});
+
+export type Board = z.infer<typeof boardEntitySchema>;
+export type Column = Board["columns"][number];
+export type Task = Column["tasks"][number];
+export type Subtask = Task["subtasks"][number];

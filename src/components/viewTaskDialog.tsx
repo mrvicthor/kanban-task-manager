@@ -20,8 +20,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useBoard } from "@/hooks/useBoard";
-import type { Task } from "@/domain/board";
+
 import { useUpdateSubtask } from "@/hooks/useUpdateSubtask";
+import type { Task } from "@/domain/schema";
 
 type ViewTaskDialogProps = {
   task: Task;

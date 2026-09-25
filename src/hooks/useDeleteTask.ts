@@ -1,4 +1,5 @@
-import type { ActionType, Task } from "@/domain/board";
+import type { ActionType } from "@/domain/board";
+import type { Task } from "@/domain/schema";
 import type { Dispatch, SetStateAction } from "react";
 
 export function useDeleteTask(

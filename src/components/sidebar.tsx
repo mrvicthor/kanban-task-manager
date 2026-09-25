@@ -52,7 +52,7 @@ const Sidebar = () => {
                 }
               >
                 <SvgComponent />
-                {board.name}
+                <span className="min-w-0 flex-1 truncate">{board.name}</span>
               </button>
             </li>
           ))}

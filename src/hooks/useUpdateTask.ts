@@ -1,5 +1,9 @@
-import type { ActionType, Task } from "@/domain/board";
-import { editTaskSchema, type EditTaskFormValues } from "@/domain/schema";
+import type { ActionType } from "@/domain/board";
+import {
+  editTaskSchema,
+  type EditTaskFormValues,
+  type Task,
+} from "@/domain/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ActionDispatch } from "react";
 import { useFieldArray, useForm } from "react-hook-form";

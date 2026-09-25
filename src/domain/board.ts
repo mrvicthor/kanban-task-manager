@@ -1,28 +1,30 @@
-export type Subtask = {
-  id: string;
-  title: string;
-  isCompleted: boolean;
-};
+// export type Subtask = {
+//   id: string;
+//   title: string;
+//   isCompleted: boolean;
+// };
 
-export type Task = {
-  id: string;
-  title: string;
-  description: string;
-  status: string;
-  subtasks: Subtask[];
-};
+import type { Board, Column, EditBoardFormValues, Task } from "./schema";
 
-export type Column = {
-  id: string;
-  name: string;
-  tasks: Task[];
-};
+// export type Task = {
+//   id: string;
+//   title: string;
+//   description: string;
+//   status: string;
+//   subtasks: Subtask[];
+// };
 
-export type Board = {
-  id: string;
-  name: string;
-  columns: Column[];
-};
+// export type Column = {
+//   id: string;
+//   name: string;
+//   tasks: Task[];
+// };
+
+// export type Board = {
+//   id: string;
+//   name: string;
+//   columns: Column[];
+// };
 
 export type BoardData = {
   boards: Board[];
@@ -39,7 +41,7 @@ export type ActionType =
       type: "update_board";
       boardId: string;
       boardName: string;
-      columns: Column[];
+      columns: EditBoardFormValues["columns"];
     }
   | {
       type: "add_task";
@@ -86,14 +88,28 @@ export function boardReducer(state: BoardData, action: ActionType) {
       return {
         ...state,
         boards: state.boards.map((board) => {
-          if (board.id === action.boardId) {
-            return {
-              ...board,
-              name: action.boardName,
-              columns: action.columns,
-            };
-          }
-          return board;
+          if (board.id !== action.boardId) return board;
+          return {
+            ...board,
+            name: action.boardName,
+            columns: action.columns.map((col): Column => {
+              const existing = col.id
+                ? board.columns.find((c) => c.id === col.id)
+                : undefined;
+              if (!existing) {
+                return {
+                  id: crypto.randomUUID(),
+                  name: col.name,
+                  tasks: [],
+                };
+              }
+              return {
+                ...existing,
+                name: col.name,
+                tasks: existing.tasks.map((t) => ({ ...t, status: col.name })),
+              };
+            }),
+          };
         }),
       };
     }
@@ -104,7 +120,7 @@ export function boardReducer(state: BoardData, action: ActionType) {
           if (board.id === action.boardId) {
             return {
               ...board,
-              columns: board.columns.map((column) => {
+              columns: board.columns.map((column: Column) => {
                 if (column.name === action.status) {
                   return { ...column, tasks: [...column.tasks, action.task] };
                 }
@@ -125,7 +141,7 @@ export function boardReducer(state: BoardData, action: ActionType) {
 
           return {
             ...board,
-            columns: board.columns.map((column) => {
+            columns: board.columns.map((column: Column) => {
               if (isMovingColumns && column.name === action.oldStatus) {
                 return {
                   ...column,
@@ -162,7 +178,7 @@ export function boardReducer(state: BoardData, action: ActionType) {
           if (board.id === action.boardId) {
             return {
               ...board,
-              columns: board.columns.map((column) => {
+              columns: board.columns.map((column: Column) => {
                 if (column.name === action.status) {
                   return {
                     ...column,

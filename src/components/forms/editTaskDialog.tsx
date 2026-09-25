@@ -23,8 +23,9 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { useBoard } from "@/hooks/useBoard";
-import type { Task } from "@/domain/board";
+
 import { useUpdateTask } from "@/hooks/useUpdateTask";
+import type { Task } from "@/domain/schema";
 
 type EditTaskDialogProps = {
   task: Task;

@@ -12,9 +12,10 @@ import { AddTaskDialog } from "./components/forms/addTaskDialog";
 import { ViewTaskDialog } from "./components/viewTaskDialog";
 import { useActiveBoard } from "./hooks/useActiveBoard";
 import { DeleteTaskDialog } from "./components/deleteTaskDialog";
-import { EditTaskDialog } from "./components/editTaskDialog";
+import { EditTaskDialog } from "./components/forms/editTaskDialog";
 import { DeleteBoardDialog } from "./components/deleteBoardDialog";
 import { EmptyBoardsState } from "./components/emptyBoard";
+import { EditBoardDialog } from "./components/forms/editBoardDialog";
 
 function App() {
   const { currentSlide, setCurrentSlide } = useSlide(); // Ensure the slide context is used in the App component
@@ -29,6 +30,7 @@ function App() {
     confirmDeleteOpen,
     setTaskId,
     showDeleteBoard,
+    showEditBoard,
   } = useBoard();
   const { activeBoardName } = useActiveBoard();
 
@@ -102,6 +104,9 @@ function App() {
           />,
           document.body,
         )}
+      {showEditBoard &&
+        board &&
+        createPortal(<EditBoardDialog board={board} />, document.body)}
     </>
   );
 }

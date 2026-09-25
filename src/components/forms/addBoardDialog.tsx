@@ -117,14 +117,14 @@ export function AddBoardDialog() {
 
             <Button
               type="button"
-              className="w-full rounded-full bg-add-column-bg text-add-column-fg hover:bg-add-column-bg/80 cursor-pointer"
+              className="w-full rounded-full bg-add-column-bg py-5 text-add-column-fg hover:bg-add-column-bg/80 cursor-pointer"
               onClick={() => append({ name: "Todo" })}
             >
               + Add New Column
             </Button>
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full py-5 rounded-full">
             Create New Board
           </Button>
         </form>

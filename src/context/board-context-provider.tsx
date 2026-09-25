@@ -2,8 +2,12 @@ import { useReducer, type ReactNode, useState } from "react";
 import { boardReducer, type BoardData } from "../domain/board";
 import { CreateBoardContext } from "./board-context";
 import { boards } from "../data.json";
+import { z } from "zod";
+import { boardEntitySchema } from "@/domain/schema";
 
-const initialState: BoardData = { boards };
+const initialState: BoardData = {
+  boards: z.array(boardEntitySchema).parse(boards),
+};
 
 export const BoardContextProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(boardReducer, initialState);
