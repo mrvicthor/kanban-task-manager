@@ -7,13 +7,17 @@ export const useActiveBoard = () => {
     state: { boards },
   } = useBoard();
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeBoardName = searchParams.get("board") ?? boards[0].name;
+
+  const activeBoardName =
+    (searchParams.get("board") ?? boards.length > 0) ? boards[0].name : "";
 
   useEffect(() => {
     const boardExists = boards.some((b) => b.name === activeBoardName);
     if (!activeBoardName || !boardExists) {
       if (boards.length > 0) {
         setSearchParams({ board: boards[0].name }, { replace: true });
+      } else {
+        setSearchParams({}, { replace: true });
       }
     }
   }, [activeBoardName, boards, setSearchParams]);

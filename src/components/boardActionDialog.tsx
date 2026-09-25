@@ -35,7 +35,6 @@ const BoardActionDialog = () => {
           className="text-destructive font-bold"
           onClick={(e) => {
             e.preventDefault();
-            console.log("delete board");
             setShowDeleteBoard(true);
           }}
         >

@@ -31,7 +31,13 @@ export function AddBoardDialog() {
 
   return (
     <Dialog open={openAddBoardForm} onOpenChange={setOpenAddBoardForm}>
-      <DialogTrigger render={<Button>+ Add New Board</Button>}></DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button className="py-5 px-6 rounded-full cursor-poiter">
+            + Add New Board
+          </Button>
+        }
+      ></DialogTrigger>
 
       <DialogContent className="sm:max-w-md">
         <DialogHeader>

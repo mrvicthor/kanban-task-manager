@@ -7,51 +7,45 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import type { Task } from "@/domain/board";
 import { useBoard } from "@/hooks/useBoard";
-import { useDeleteTask } from "@/hooks/useDeleteTask";
+import { useDeleteBoard } from "@/hooks/useDeleteBoard";
 
-type DeleteTaskDialogProps = {
+type DeleteBoardDialogProps = {
   open: boolean;
+  boardTitle: string;
   boardId: string;
-  task: Task;
 };
 
-export function DeleteTaskDialog({
+export function DeleteBoardDialog({
   open,
-  task,
+  boardTitle,
   boardId,
-}: DeleteTaskDialogProps) {
-  const { dispatch, setConfirmDeleteOpen } = useBoard();
-  const { handleDelete } = useDeleteTask(
-    boardId,
-    task,
-    dispatch,
-    setConfirmDeleteOpen,
-  );
+}: DeleteBoardDialogProps) {
+  const { setShowDeleteBoard } = useBoard();
+  const { deleteBoard } = useDeleteBoard(boardId);
   return (
-    <AlertDialog open={open} onOpenChange={() => setConfirmDeleteOpen(false)}>
+    <AlertDialog open={open} onOpenChange={() => setShowDeleteBoard(false)}>
       <AlertDialogContent className="sm:max-w-md py-6 px-6">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-destructive text-lg font-bold">
-            Delete this task?
+            Delete this board?
           </AlertDialogTitle>
           <AlertDialogDescription className="text-sm text-muted-foreground leading-relaxed">
-            Are you sure you want to delete the '{task.title}' task and its
-            subtasks? This action cannot be reversed.
+            Are you sure you want to delete the '{boardTitle}' board? This
+            action will remove all columns and tasks and cannot be reversed.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter className="flex-row gap-4 sm:justify-start border-0 bg-transparent">
           <AlertDialogAction
-            onClick={handleDelete}
+            onClick={deleteBoard}
             className="flex-1 rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/80"
           >
             Delete
           </AlertDialogAction>
           <button
             className="flex-1 rounded-full bg-add-column-bg text-add-column-fg hover:bg-add-column-bg/80 border-none capitalize cursor-pointer"
-            onClick={() => setConfirmDeleteOpen(false)}
+            onClick={() => setShowDeleteBoard(false)}
           >
             cancel
           </button>

@@ -12,8 +12,9 @@ import { AddTaskDialog } from "./components/forms/addTaskDialog";
 import { ViewTaskDialog } from "./components/viewTaskDialog";
 import { useActiveBoard } from "./hooks/useActiveBoard";
 import { DeleteTaskDialog } from "./components/deleteTaskDialog";
-import { useDeleteTask } from "./hooks/useDeleteTask";
 import { EditTaskDialog } from "./components/editTaskDialog";
+import { DeleteBoardDialog } from "./components/deleteBoardDialog";
+import { EmptyBoardsState } from "./components/emptyBoard";
 
 function App() {
   const { currentSlide, setCurrentSlide } = useSlide(); // Ensure the slide context is used in the App component
@@ -25,22 +26,18 @@ function App() {
     viewTask,
     onEdit,
     setOnEdit,
-    dispatch,
-    setConfirmDeleteOpen,
     confirmDeleteOpen,
     setTaskId,
+    showDeleteBoard,
   } = useBoard();
   const { activeBoardName } = useActiveBoard();
+
   const board = boards.find((b) => b.name === activeBoardName)!;
+  if (!board) {
+    return <EmptyBoardsState />;
+  }
   const selectedTask =
     board.columns.flatMap((c) => c.tasks).find((t) => t.id === taskId) ?? null;
-
-  const { handleDelete } = useDeleteTask(
-    board.id,
-    selectedTask!,
-    dispatch,
-    setConfirmDeleteOpen,
-  );
 
   return (
     <>
@@ -76,9 +73,8 @@ function App() {
         createPortal(
           <DeleteTaskDialog
             open={confirmDeleteOpen}
-            onOpenChange={() => setConfirmDeleteOpen(false)}
-            taskTitle={selectedTask.title}
-            onConfirm={handleDelete}
+            boardId={board.id}
+            task={selectedTask}
           />,
           document.body,
         )}
@@ -92,6 +88,17 @@ function App() {
               setOnEdit(false);
               setTaskId(null);
             }}
+          />,
+          document.body,
+        )}
+
+      {showDeleteBoard &&
+        board.id &&
+        createPortal(
+          <DeleteBoardDialog
+            open={showDeleteBoard}
+            boardTitle={board.name}
+            boardId={board.id}
           />,
           document.body,
         )}
