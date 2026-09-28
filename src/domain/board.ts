@@ -1,30 +1,4 @@
-// export type Subtask = {
-//   id: string;
-//   title: string;
-//   isCompleted: boolean;
-// };
-
 import type { Board, Column, EditBoardFormValues, Task } from "./schema";
-
-// export type Task = {
-//   id: string;
-//   title: string;
-//   description: string;
-//   status: string;
-//   subtasks: Subtask[];
-// };
-
-// export type Column = {
-//   id: string;
-//   name: string;
-//   tasks: Task[];
-// };
-
-// export type Board = {
-//   id: string;
-//   name: string;
-//   columns: Column[];
-// };
 
 export type BoardData = {
   boards: Board[];
@@ -61,9 +35,16 @@ export type ActionType =
       boardId: string;
       status: string;
       taskId: string;
+    }
+  | {
+      type: "move_task";
+      boardId: string;
+      taskId: string;
+      toColumnId: string;
+      toIndex: number;
     };
 
-export function boardReducer(state: BoardData, action: ActionType) {
+export function boardReducer(state: BoardData, action: ActionType): BoardData {
   switch (action.type) {
     case "add_board": {
       return {
@@ -192,6 +173,35 @@ export function boardReducer(state: BoardData, action: ActionType) {
             };
           }
           return board;
+        }),
+      };
+    }
+    case "move_task": {
+      return {
+        ...state,
+        boards: state.boards.map((board) => {
+          if (board.id !== action.boardId) return board;
+          const task = board.columns
+            .flatMap((c) => c.tasks)
+            .find((t) => t.id === action.taskId);
+          if (!task) return board;
+
+          return {
+            ...board,
+            columns: board.columns.map((col) => {
+              const tasks = col.tasks.filter(
+                (task) => task.id !== action.taskId,
+              );
+
+              if (col.id !== action.toColumnId) {
+                return tasks.length === col.tasks.length
+                  ? col
+                  : { ...col, tasks };
+              }
+              tasks.splice(action.toIndex, 0, { ...task, status: col.name });
+              return { ...col, tasks };
+            }),
+          };
         }),
       };
     }

@@ -6,7 +6,6 @@ import { useSlide } from "./hooks/useSlide";
 import OpenEye from "@/assets/icon-show-sidebar.svg";
 import { useBoard } from "@/hooks/useBoard";
 import { AddBoardDialog } from "./components/forms/addBoardDialog";
-import Board from "./components/board";
 
 import { AddTaskDialog } from "./components/forms/addTaskDialog";
 import { ViewTaskDialog } from "./components/viewTaskDialog";
@@ -16,9 +15,9 @@ import { DeleteBoardDialog } from "./components/deleteBoardDialog";
 import { EmptyBoardsState } from "./components/emptyBoard";
 import { EditBoardDialog } from "./components/forms/editBoardDialog";
 import { useActiveBoard } from "./hooks/useActiveBoard";
+import BoardUI from "./components/boardUI";
 
 function App() {
-  console.log("App loaded");
   const { currentSlide, setCurrentSlide } = useSlide(); // Ensure the slide context is used in the App component
   const {
     openAddBoardForm,
@@ -65,7 +64,7 @@ function App() {
             />
           </button>
         )}
-        <Board activeBoardName={activeBoardName!} />
+        <BoardUI board={board} />
       </main>
       {openAddBoardForm && createPortal(<AddBoardDialog />, document.body)}
       {showTaskForm &&
