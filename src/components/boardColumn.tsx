@@ -17,13 +17,13 @@ export function BoardColumn({ column, onOpenTask }: BoardColumnProps) {
 
   return (
     <li className="flex flex-col w-70 shrink-0">
-      <span className="flex items-center gap-3 uppercase text-muted-foreground font-bold text-xs tracking-[2.4px] mb-6">
+      <h2 className="flex items-center gap-3 uppercase text-muted-foreground font-bold text-xs tracking-[2.4px] mb-6">
         <span
           style={{ backgroundColor: getStatusColor(column.name) }}
           className="block rounded-full size-3.75 shrink-0"
         />
         {column.name} ({column.tasks.length})
-      </span>
+      </h2>
 
       <SortableContext
         items={column.tasks.map((t) => t.id)}

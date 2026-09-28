@@ -47,11 +47,11 @@ const Header = ({ activeBoardName }: HeaderProps) => {
           className="w-full h-full object-contain md:hidden"
         />
       </div>
-      <p
+      <h1
         className={`${currentSlide === 0 && "md:pl-70 transition-transform duration-300 ease-in-out"} text-foreground text-2xl font-bold`}
       >
         {activeBoardName}
-      </p>
+      </h1>
       <button
         onClick={() => setShowTaskForm(true)}
         className="ml-auto md:hidden bg-primary py-3 px-5 rounded-full cursor-pointer hover:bg-primary-hover text-white"
