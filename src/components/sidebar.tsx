@@ -48,7 +48,7 @@ const Sidebar = ({ activeBoardName, setSearchParams }: SidebarProps) => {
             <li
               key={index}
               onClick={() => setSearchParams({ board: board.name })}
-              className={`${board.name === activeBoardName ? "bg-primary text-white" : "hover:bg-background hover:text-primary"} cursor-pointer px-16 py-3.5 text-muted-foreground  left-4 rounded-full`}
+              className={`${board.name === activeBoardName ? "bg-primary text-white" : "hover:bg-background hover:text-primary"} cursor-pointer px-16 py-3.5 text-muted-foreground left-4 rounded-full`}
             >
               <button
                 className="flex items-center gap-4 cursor-pointer"
@@ -57,7 +57,9 @@ const Sidebar = ({ activeBoardName, setSearchParams }: SidebarProps) => {
                 }
               >
                 <SvgComponent />
-                <span className="min-w-0 flex-1 truncate">{board.name}</span>
+                <span className="min-w-0 flex-1 truncate capitalize">
+                  {board.name}
+                </span>
               </button>
             </li>
           ))}
