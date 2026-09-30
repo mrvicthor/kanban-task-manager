@@ -74,7 +74,7 @@ const Header = ({ activeBoardName, setSearchParams }: HeaderProps) => {
           </h1>
           <PopoverTrigger
             aria-label="Show all boards"
-            className={cn("pl-4 md:hidden cursor-pointer")}
+            className="pl-4 md:hidden cursor-pointer"
           >
             {openMobileMenu ? <ChevronUp /> : <ChevronDown />}
           </PopoverTrigger>
