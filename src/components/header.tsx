@@ -68,7 +68,7 @@ const Header = ({ activeBoardName, setSearchParams }: HeaderProps) => {
             />
           </div>
           <h1
-            className={`${currentSlide === 0 && "md:pl-66 transition-transform duration-300 ease-in-out"} text-foreground text-2xl font-bold`}
+            className={`${currentSlide === 0 && "md:pl-66 transition-transform duration-300 ease-in-out"} text-foreground text-lg md:text-2xl font-bold`}
           >
             {activeBoardName}
           </h1>
