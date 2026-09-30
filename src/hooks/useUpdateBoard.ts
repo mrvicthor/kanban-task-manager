@@ -1,16 +1,21 @@
 import {
   type Board,
   type EditBoardFormValues,
-  editBoardSchema,
+  editBoardSchemaHelper,
 } from "@/domain/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useBoard } from "./useBoard";
 
 export function useUpdateBoard(board: Board) {
-  const { dispatch } = useBoard();
+  const {
+    dispatch,
+    state: { boards },
+  } = useBoard();
   const form = useForm<EditBoardFormValues>({
-    resolver: zodResolver(editBoardSchema),
+    resolver: zodResolver(
+      editBoardSchemaHelper(boards.map((board) => board.name)),
+    ),
     defaultValues: {
       name: board.name,
       columns: board.columns.map(({ id, name }) => ({

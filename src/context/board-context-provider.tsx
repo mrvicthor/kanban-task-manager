@@ -19,6 +19,7 @@ export const BoardContextProvider = ({ children }: { children: ReactNode }) => {
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [showEditBoard, setShowEditBoard] = useState(false);
   const [showDeleteBoard, setShowDeleteBoard] = useState(false);
+  const [openMobileMenu, setOpenMobileMenu] = useState(false);
 
   return (
     <CreateBoardContext
@@ -41,6 +42,8 @@ export const BoardContextProvider = ({ children }: { children: ReactNode }) => {
         showEditBoard,
         showDeleteBoard,
         setShowDeleteBoard,
+        openMobileMenu,
+        setOpenMobileMenu,
       }}
     >
       {children}

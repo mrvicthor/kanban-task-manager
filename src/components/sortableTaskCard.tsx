@@ -28,6 +28,7 @@ export function SortableTaskCard({ task, onOpen }: SortableTaskCardProps) {
       {...attributes}
       {...listeners}
       onClick={onOpen}
+      onKeyDown={onOpen}
       className={`${cardClasses} cursor-pointer hover:opacity-80 transition-opacity ${
         isDragging ? "opacity-40" : ""
       }`}

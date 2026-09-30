@@ -54,16 +54,15 @@ const BoardUI = ({ board }: BoardUIProps) => {
               />
             ))}
 
-            <li className="flex flex-col w-70 shrink-0 group min-h-[85vh]">
+            <li className="flex flex-col w-70 shrink-0 group min-h-[80vh]">
               <span className="mb-6 h-4.25" aria-hidden="true" />
-              <div className="flex-1 rounded-[6px] bg-linear-to-b from-border/40 to-border/20 flex items-center justify-center cursor-pointer hover:from-border/60 hover:to-border/30 transition-colors">
-                <span
-                  onClick={() => setShowEditBoard(true)}
-                  className="text-2xl font-bold text-muted-foreground group-hover:text-primary"
-                >
-                  + New Column
-                </span>
-              </div>
+              <button
+                type="button"
+                onClick={() => setShowEditBoard(true)}
+                className="text-2xl font-bold text-muted-foreground group-hover:text-primary flex-1 rounded-[6px] bg-linear-to-b from-border/40 to-border/20 flex items-center justify-center cursor-pointer hover:from-border/60 hover:to-border/30 transition-colors"
+              >
+                + New Column
+              </button>
             </li>
           </ul>
 

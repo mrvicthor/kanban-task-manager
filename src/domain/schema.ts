@@ -12,7 +12,12 @@ export const COLUMN_OPTIONS = [
 export type ColumnName = (typeof COLUMN_OPTIONS)[number];
 
 const columnName = z.enum(COLUMN_OPTIONS, { message: "Select a column" });
-const boardName = z.string().min(1, "Board name is required");
+const boardName = z
+  .string()
+  .trim()
+  .min(1, "Board name is required")
+  .max(50, "Board name must be 50 characters or less")
+  .regex(/\p{L}/u, "Board name must contain at least one letter");
 
 export const subtaskSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -53,6 +58,13 @@ export const addBoardSchema = z.object({
   columns: columnsArray(boardColumnFields),
 });
 
+export const createAddBoardSchema = (existingNames: string[]) =>
+  addBoardSchema.refine(
+    (values) =>
+      !existingNames.some((n) => n.toLowerCase() === values.name.toLowerCase()),
+    { message: "A board with this name already exists", path: ["name"] },
+  );
+
 export type AddBoardFormValues = z.infer<typeof addBoardSchema>;
 
 export const addTaskSchema = z.object({
@@ -70,6 +82,12 @@ export const editBoardSchema = addBoardSchema.extend({
   ),
 });
 
+export const editBoardSchemaHelper = (existingNames: string[]) =>
+  editBoardSchema.refine(
+    (values) =>
+      !existingNames.some((n) => n.toLowerCase() === values.name.toLowerCase()),
+    { message: "A board with this name already exists", path: ["name"] },
+  );
 export type EditBoardFormValues = z.infer<typeof editBoardSchema>;
 
 export type AddTaskFormValues = z.infer<typeof addTaskSchema>;

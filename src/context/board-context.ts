@@ -19,6 +19,8 @@ export type BoardContextType = {
   setShowEditBoard: Dispatch<SetStateAction<boolean>>;
   showDeleteBoard: boolean;
   setShowDeleteBoard: Dispatch<SetStateAction<boolean>>;
+  openMobileMenu: boolean;
+  setOpenMobileMenu: Dispatch<SetStateAction<boolean>>;
 };
 
 export const CreateBoardContext = createContext<BoardContextType | undefined>(

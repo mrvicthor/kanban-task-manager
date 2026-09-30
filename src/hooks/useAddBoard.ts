@@ -1,5 +1,9 @@
 import type { ActionType } from "@/domain/board";
-import { addBoardSchema, type AddBoardFormValues } from "@/domain/schema";
+import {
+  createAddBoardSchema,
+  type AddBoardFormValues,
+  type Board,
+} from "@/domain/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ActionDispatch, Dispatch, SetStateAction } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -7,9 +11,12 @@ import { useFieldArray, useForm } from "react-hook-form";
 export function useAddBoard(
   setOpenAddBoardForm: Dispatch<SetStateAction<boolean>>,
   dispatch: ActionDispatch<[action: ActionType]>,
+  boards: Board[],
 ) {
   const form = useForm<AddBoardFormValues>({
-    resolver: zodResolver(addBoardSchema),
+    resolver: zodResolver(
+      createAddBoardSchema(boards.map((board) => board.name)),
+    ),
     defaultValues: {
       name: "",
       columns: [{ name: "Todo" }, { name: "Doing" }],

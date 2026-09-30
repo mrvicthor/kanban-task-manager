@@ -48,7 +48,10 @@ function App() {
         activeBoardName={activeBoardName}
         setSearchParams={setSearchParams}
       />
-      <Header activeBoardName={activeBoardName} />
+      <Header
+        activeBoardName={activeBoardName}
+        setSearchParams={setSearchParams}
+      />
       <main
         className={`${currentSlide > 0 ? "ml-0" : "md:ml-75"} transition-all duration-300 ease-in-out`}
       >

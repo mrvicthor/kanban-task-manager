@@ -23,10 +23,16 @@ import { Input } from "@/components/ui/input";
 import { useAddBoard } from "@/hooks/useAddBoard";
 
 export function AddBoardDialog() {
-  const { setOpenAddBoardForm, openAddBoardForm, dispatch } = useBoard();
+  const {
+    setOpenAddBoardForm,
+    openAddBoardForm,
+    dispatch,
+    state: { boards },
+  } = useBoard();
   const { form, onSubmit, fields, remove, append } = useAddBoard(
     setOpenAddBoardForm,
     dispatch,
+    boards,
   );
 
   return (
