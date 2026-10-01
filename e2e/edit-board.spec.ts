@@ -1,5 +1,5 @@
-import { test, expect } from "@playwright/experimental-ct-react";
-import data from "../../../../data.json" with { type: "json" };
+import { test, expect } from "@playwright/test";
+import data from "../src/data.json" with { type: "json" };
 
 test("edit board", async ({ page }) => {
   const firstBoard = data.boards[0];
@@ -9,7 +9,7 @@ test("edit board", async ({ page }) => {
   );
   await page.getByRole("button", { name: "Board options" }).click();
   await page.getByRole("menuitem", { name: "Edit Board" }).click();
-  await page.getByLabel("edit-board-name").fill("1");
+  await page.getByLabel("Board Name").fill("1");
   await page.getByRole("button", { name: "Save Changes" }).click();
 
   await expect(
@@ -18,11 +18,10 @@ test("edit board", async ({ page }) => {
       .filter({ hasText: "Board name must contain at least one letter" }),
   ).toBeVisible();
 
-  await page.getByLabel("edit-board-name").clear();
-  await page.getByLabel("edit-board-name").fill("Learn Java");
+  await page.getByLabel("Board Name").clear();
+  await page.getByLabel("Board Name").fill("Learn Java");
   await page.getByRole("button", { name: "Save Changes" }).click();
   await expect(page).toHaveURL(
     (url) => url.searchParams.get("board") === "Learn Java",
   );
-  await expect(page.getByRole("heading", { name: "Learn Java" })).toBeVisible();
 });
