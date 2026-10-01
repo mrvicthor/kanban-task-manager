@@ -53,6 +53,7 @@ const Sidebar = ({ activeBoardName, setSearchParams }: SidebarProps) => {
 
       <button
         onClick={() => setOpenAddBoardForm(!openAddBoardForm)}
+        aria-label="add new board"
         className="text-primary flex items-center capitalize gap-4 text-sm font-bold cursor-pointer"
       >
         <SvgComponent /> + create new board

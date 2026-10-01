@@ -9,7 +9,7 @@ test("edit board", async ({ page }) => {
   );
   await page.getByRole("button", { name: "Board options" }).click();
   await page.getByRole("menuitem", { name: "Edit Board" }).click();
-  await page.getByLabel("Board Name").fill("1");
+  await page.getByLabel("BoardName").fill("1");
   await page.getByRole("button", { name: "Save Changes" }).click();
 
   await expect(

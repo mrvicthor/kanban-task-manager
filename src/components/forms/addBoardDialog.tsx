@@ -106,6 +106,9 @@ export function AddBoardDialog() {
                           ))}
                         </SelectContent>
                       </Select>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
                     </Field>
                   )}
                 />
@@ -120,7 +123,15 @@ export function AddBoardDialog() {
                 </button>
               </div>
             ))}
-
+            {(form.formState.errors.columns?.root?.message ||
+              form.formState.errors.columns?.message) && (
+              <FieldError
+                errors={[
+                  form.formState.errors.columns.root ??
+                    form.formState.errors.columns,
+                ]}
+              />
+            )}
             <Button
               type="button"
               className="w-full rounded-full bg-add-column-bg py-5 text-add-column-fg hover:bg-add-column-bg/80 cursor-pointer"
