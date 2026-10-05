@@ -6,8 +6,12 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useBoard } from "./useBoard";
+import type { Dispatch, SetStateAction } from "react";
 
-export function useAddTask(board: Board) {
+export function useAddTask(
+  board: Board,
+  setShowTaskForm: Dispatch<SetStateAction<boolean>>,
+) {
   const { dispatch } = useBoard();
   const form = useForm<AddTaskFormValues>({
     resolver: zodResolver(addTaskSchema),
@@ -44,6 +48,7 @@ export function useAddTask(board: Board) {
       },
     });
     form.reset();
+    setShowTaskForm(false);
   };
 
   return {

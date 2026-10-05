@@ -34,7 +34,10 @@ export function AddTaskDialog({ activeBoardName }: Props) {
   } = useBoard();
   const board = boards.find((b) => b.name === activeBoardName)!;
 
-  const { form, onSubmit, remove, append, fields } = useAddTask(board);
+  const { form, onSubmit, remove, append, fields } = useAddTask(
+    board,
+    setShowTaskForm,
+  );
 
   return (
     <Dialog open={showTaskForm} onOpenChange={setShowTaskForm}>
@@ -56,7 +59,10 @@ export function AddTaskDialog({ activeBoardName }: Props) {
             name="title"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel className="text-xs text-muted-foreground">
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="text-xs text-muted-foreground"
+                >
                   Title
                 </FieldLabel>
                 <Input
@@ -77,7 +83,10 @@ export function AddTaskDialog({ activeBoardName }: Props) {
             name="description"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel className="text-xs text-muted-foreground">
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="text-xs text-muted-foreground"
+                >
                   Description
                 </FieldLabel>
 
@@ -109,6 +118,7 @@ export function AddTaskDialog({ activeBoardName }: Props) {
                     <div className="flex items-center gap-4">
                       <Input
                         placeholder="e.g. Make coffee"
+                        aria-label={`Subtask ${index + 1}`}
                         aria-invalid={!!fieldState.error}
                         className={
                           fieldState.error
@@ -121,7 +131,7 @@ export function AddTaskDialog({ activeBoardName }: Props) {
                       <button
                         type="button"
                         onClick={() => remove(index)}
-                        aria-label="Remove subtask"
+                        aria-label={`Remove subtask ${index + 1}`}
                         className="text-muted-foreground hover:text-foreground shrink-0"
                       >
                         <X className="size-4" />
@@ -153,7 +163,7 @@ export function AddTaskDialog({ activeBoardName }: Props) {
                   Status
                 </FieldLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full" aria-label="Status">
                     <SelectValue />
                   </SelectTrigger>
 
