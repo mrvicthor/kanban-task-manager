@@ -45,4 +45,12 @@ test.describe("add task", () => {
     const card = page.getByText("Go for a run", { exact: true });
     await expect(card).toBeVisible();
   });
+
+  test("rejects empty title", async ({ page }) => {
+    const dialog = page.getByRole("dialog", { name: "Add New Task" });
+    await dialog.getByRole("button", { name: "Create Task" }).click();
+
+    await expect(dialog).toBeVisible();
+    await expect(page.getByRole("alert").first()).toBeVisible();
+  });
 });
