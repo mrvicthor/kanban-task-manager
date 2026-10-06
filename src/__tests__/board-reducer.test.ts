@@ -70,4 +70,21 @@ describe("boardReducer", () => {
     });
     expect(next).toEqual({ ...initialState, boards: [updatedBoard] });
   });
+
+  test("should be able to delete a board if action type is 'delete_board'", () => {
+    const board: Board = {
+      id: "learn-java-ab2cc4",
+      name: "Learn Java",
+      columns: [],
+    };
+    const initialState: BoardData = {
+      boards: [board],
+    };
+    const next = boardReducer(initialState, {
+      type: "delete_board",
+      boardId: board.id,
+    });
+
+    expect(next).toEqual({ ...initialState, boards: [] });
+  });
 });
