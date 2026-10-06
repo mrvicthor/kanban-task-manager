@@ -1,6 +1,6 @@
 import { expect, test, describe } from "vitest";
 import { boardReducer, type ActionType, type BoardData } from "../domain/board";
-import { type Board } from "@/domain/schema";
+import { type Board, type Task } from "@/domain/schema";
 
 describe("boardReducer", () => {
   test("should throw an error for unknown action type", () => {
@@ -86,5 +86,53 @@ describe("boardReducer", () => {
     });
 
     expect(next).toEqual({ ...initialState, boards: [] });
+  });
+
+  test("should add new task to a column if action type is 'add_task'", () => {
+    const board: Board = {
+      id: "learn-java-ab2cc4",
+      name: "Learn Java",
+      columns: [
+        {
+          id: "doing-0abze-3rc56",
+          name: "Todo",
+          tasks: [],
+        },
+      ],
+    };
+    const initialState: BoardData = {
+      boards: [board],
+    };
+
+    const task: Task = {
+      id: crypto.randomUUID(),
+      title: "Read a book",
+      description: "I have to read",
+      subtasks: [],
+      status: "Todo",
+    };
+
+    const next = boardReducer(initialState, {
+      type: "add_task",
+      boardId: board.id,
+      task,
+      status: "Todo",
+    });
+
+    expect(next).toEqual({
+      ...initialState,
+      boards: [
+        {
+          ...board,
+          columns: [
+            {
+              id: "doing-0abze-3rc56",
+              name: "Todo",
+              tasks: [{ ...task }],
+            },
+          ],
+        },
+      ],
+    });
   });
 });
