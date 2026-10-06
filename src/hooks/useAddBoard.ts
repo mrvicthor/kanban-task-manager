@@ -31,6 +31,7 @@ export function useAddBoard(
   const onSubmit = (values: AddBoardFormValues) => {
     dispatch({
       type: "add_board",
+      boardId: crypto.randomUUID(),
       boardName: values.name,
       columns: values.columns.map((col) => ({
         id: crypto.randomUUID(),

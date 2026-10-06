@@ -8,6 +8,7 @@ export type ActionType =
   | {
       type: "add_board";
       boardName: string;
+      boardId: string;
       columns: Column[];
     }
   | { type: "delete_board"; boardId: string }
@@ -15,6 +16,7 @@ export type ActionType =
       type: "update_board";
       boardId: string;
       boardName: string;
+      columnId: string;
       columns: EditBoardFormValues["columns"];
     }
   | {
@@ -52,7 +54,7 @@ export function boardReducer(state: BoardData, action: ActionType): BoardData {
         boards: [
           ...state.boards,
           {
-            id: crypto.randomUUID(),
+            id: action.boardId,
             name: action.boardName,
             columns: action.columns,
           },
@@ -79,7 +81,7 @@ export function boardReducer(state: BoardData, action: ActionType): BoardData {
                 : undefined;
               if (!existing) {
                 return {
-                  id: crypto.randomUUID(),
+                  id: action.columnId,
                   name: col.name,
                   tasks: [],
                 };

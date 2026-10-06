@@ -36,6 +36,7 @@ export function useUpdateBoard(board: Board) {
       boardId: board.id,
       boardName: values.name,
       columns: values.columns,
+      columnId: crypto.randomUUID(),
     });
   };
 
