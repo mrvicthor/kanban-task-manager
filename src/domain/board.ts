@@ -205,5 +205,7 @@ export function boardReducer(state: BoardData, action: ActionType): BoardData {
         }),
       };
     }
+    default:
+      throw new Error(`Unknown action type: ${(action as ActionType).type}`);
   }
 }
