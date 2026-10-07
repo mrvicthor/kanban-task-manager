@@ -247,4 +247,222 @@ describe("boardReducer", () => {
       ],
     });
   });
+
+  test("should move task to a new column and update it if the action type is 'move_task'", () => {
+    const board: Board = {
+      id: "board-platform-launch",
+      name: "Platform Launch",
+      columns: [
+        {
+          id: "col-platform-launch-todo",
+          name: "Todo",
+          tasks: [
+            {
+              id: "task-build-ui-for-onboarding-flow",
+              title: "Build UI for onboarding flow",
+              description: "",
+              status: "Todo",
+              subtasks: [
+                {
+                  id: "subtask-sign-up-page",
+                  title: "Sign up page",
+                  isCompleted: true,
+                },
+                {
+                  id: "subtask-sign-in-page",
+                  title: "Sign in page",
+                  isCompleted: false,
+                },
+                {
+                  id: "subtask-welcome-page",
+                  title: "Welcome page",
+                  isCompleted: false,
+                },
+              ],
+            },
+            {
+              id: "task-build-ui-for-search",
+              title: "Build UI for search",
+              description: "",
+              status: "Todo",
+              subtasks: [
+                {
+                  id: "subtask-search-page",
+                  title: "Search page",
+                  isCompleted: false,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "col-platform-launch-doing",
+          name: "Doing",
+          tasks: [
+            {
+              id: "task-design-settings-and-search-pages",
+              title: "Design settings and search pages",
+              description: "",
+              status: "Doing",
+              subtasks: [
+                {
+                  id: "subtask-settings-account-page",
+                  title: "Settings - Account page",
+                  isCompleted: true,
+                },
+                {
+                  id: "subtask-settings-billing-page",
+                  title: "Settings - Billing page",
+                  isCompleted: true,
+                },
+                {
+                  id: "subtask-search-page-2",
+                  title: "Search page",
+                  isCompleted: false,
+                },
+              ],
+            },
+            {
+              id: "task-add-account-management-endpoints",
+              title: "Add account management endpoints",
+              description: "",
+              status: "Doing",
+              subtasks: [
+                {
+                  id: "subtask-upgrade-plan",
+                  title: "Upgrade plan",
+                  isCompleted: true,
+                },
+                {
+                  id: "subtask-cancel-plan",
+                  title: "Cancel plan",
+                  isCompleted: true,
+                },
+                {
+                  id: "subtask-update-payment-method",
+                  title: "Update payment method",
+                  isCompleted: false,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    const initialState: BoardData = {
+      boards: [board],
+    };
+    const next = boardReducer(initialState, {
+      type: "move_task",
+      boardId: board.id,
+      taskId: "task-build-ui-for-onboarding-flow",
+      toColumnId: "col-platform-launch-doing",
+      toIndex: 2,
+    });
+
+    expect(next).toEqual({
+      ...initialState,
+      boards: [
+        {
+          ...board,
+          columns: [
+            {
+              id: "col-platform-launch-todo",
+              name: "Todo",
+              tasks: [
+                {
+                  id: "task-build-ui-for-search",
+                  title: "Build UI for search",
+                  description: "",
+                  status: "Todo",
+                  subtasks: [
+                    {
+                      id: "subtask-search-page",
+                      title: "Search page",
+                      isCompleted: false,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: "col-platform-launch-doing",
+              name: "Doing",
+              tasks: [
+                {
+                  id: "task-design-settings-and-search-pages",
+                  title: "Design settings and search pages",
+                  description: "",
+                  status: "Doing",
+                  subtasks: [
+                    {
+                      id: "subtask-settings-account-page",
+                      title: "Settings - Account page",
+                      isCompleted: true,
+                    },
+                    {
+                      id: "subtask-settings-billing-page",
+                      title: "Settings - Billing page",
+                      isCompleted: true,
+                    },
+                    {
+                      id: "subtask-search-page-2",
+                      title: "Search page",
+                      isCompleted: false,
+                    },
+                  ],
+                },
+                {
+                  id: "task-add-account-management-endpoints",
+                  title: "Add account management endpoints",
+                  description: "",
+                  status: "Doing",
+                  subtasks: [
+                    {
+                      id: "subtask-upgrade-plan",
+                      title: "Upgrade plan",
+                      isCompleted: true,
+                    },
+                    {
+                      id: "subtask-cancel-plan",
+                      title: "Cancel plan",
+                      isCompleted: true,
+                    },
+                    {
+                      id: "subtask-update-payment-method",
+                      title: "Update payment method",
+                      isCompleted: false,
+                    },
+                  ],
+                },
+                {
+                  id: "task-build-ui-for-onboarding-flow",
+                  title: "Build UI for onboarding flow",
+                  description: "",
+                  status: "Doing",
+                  subtasks: [
+                    {
+                      id: "subtask-sign-up-page",
+                      title: "Sign up page",
+                      isCompleted: true,
+                    },
+                    {
+                      id: "subtask-sign-in-page",
+                      title: "Sign in page",
+                      isCompleted: false,
+                    },
+                    {
+                      id: "subtask-welcome-page",
+                      title: "Welcome page",
+                      isCompleted: false,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  });
 });
