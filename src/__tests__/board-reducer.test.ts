@@ -135,4 +135,116 @@ describe("boardReducer", () => {
       ],
     });
   });
+
+  test("should update task if the action type is 'update_task'", () => {
+    const board: Board = {
+      id: "learn-java-ab2cc4",
+      name: "Learn Java",
+      columns: [
+        {
+          id: "doing-0abze-3rc56",
+          name: "Todo",
+          tasks: [
+            {
+              id: "todo-056abc-3rech",
+              title: "Read a book",
+              description: "I have to read",
+              subtasks: [],
+              status: "Todo",
+            },
+          ],
+        },
+      ],
+    };
+    const initialState: BoardData = {
+      boards: [board],
+    };
+
+    const updatedTask: Task = {
+      id: "todo-056abc-3rech",
+      title: "Watch youtube tutorials",
+      description: "I have to read",
+      subtasks: [],
+      status: "Todo",
+    };
+    const next = boardReducer(initialState, {
+      type: "update_task",
+      boardId: board.id,
+      oldStatus: board.columns[0].name,
+      taskId: updatedTask.id,
+      task: updatedTask,
+    });
+
+    expect(next).toEqual({
+      ...initialState,
+      boards: [
+        {
+          ...board,
+          columns: [
+            {
+              id: "doing-0abze-3rc56",
+              name: "Todo",
+              tasks: [
+                {
+                  id: "todo-056abc-3rech",
+                  title: updatedTask.title,
+                  description: updatedTask.description,
+                  subtasks: updatedTask.subtasks,
+                  status: updatedTask.status,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  test("should delete task if the action type is 'delete_task'", () => {
+    const board: Board = {
+      id: "learn-java-ab2cc4",
+      name: "Learn Java",
+      columns: [
+        {
+          id: "doing-0abze-3rc56",
+          name: "Todo",
+          tasks: [
+            {
+              id: "todo-056abc-3rech",
+              title: "Read a book",
+              description: "I have to read",
+              subtasks: [],
+              status: "Todo",
+            },
+          ],
+        },
+      ],
+    };
+    const initialState: BoardData = {
+      boards: [board],
+    };
+
+    const next = boardReducer(initialState, {
+      type: "delete_task",
+      boardId: board.id,
+      status: board.columns[0].name,
+      taskId: board.columns[0].tasks[0].id,
+    });
+
+    expect(next).toEqual({
+      ...initialState,
+      boards: [
+        {
+          ...board,
+          columns: [
+            {
+              id: "doing-0abze-3rc56",
+              name: "Todo",
+              tasks: [],
+            },
+          ],
+        },
+      ],
+    });
+  });
 });
